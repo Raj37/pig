@@ -16,3 +16,14 @@ date_load = LOAD '/user/cloudera/pig/date.txt' USING PigStorage(',') AS(id:int,d
 Projected = FOREACH date_load GENERATE id,toDate(date,'yyyy/MM/dd HH:mm:ss');
 
 year_data = FOREACH Projected GENERATE date_time, GetYear(date_time), GetMonth(date_time), GetDay(date_time);
+
+Additional Changes on datetime:
+Projected1 = FOREACH Projected GENERATE id,ToString(date_time,'yyyy-MM-dd HH:mm:ss') as stime;
+(1,1989-09-26 09:00:00)
+(2,1980-06-20 10:22:00)
+(3,1990-12-19 03:11:44)
+
+Projected1 = FOREACH Projected GENERATE id,ToString(date_time,'yyyy-MM-dd') as stime;
+(1,1989-09-26)
+(2,1980-06-20)
+(3,1990-12-19)
