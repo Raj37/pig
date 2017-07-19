@@ -1,0 +1,18 @@
+Input Data Set:
+id,date
+001,1989/09/26 09:00:00
+002,1980/06/20 10:22:00
+003,1990/12/19 03:11:44
+
+Output Date Set:
+time_stamp,year,month,day
+(1989-09-26T09:00:00.000-07:00,1989,9,26)
+(1980-06-20T10:22:00.000-07:00,1980,6,20)
+(1990-12-19T03:11:44.000-08:00,1990,12,19)
+
+Transformation:
+date_load = LOAD '/user/cloudera/pig/date.txt' USING PigStorage(',') AS(id:int,date:chararray);
+
+Projected = FOREACH date_load GENERATE id,toDate(date,'yyyy/MM/dd HH:mm:ss');
+
+year_data = FOREACH Projected GENERATE date_time, GetYear(date_time), GetMonth(date_time), GetDay(date_time);
